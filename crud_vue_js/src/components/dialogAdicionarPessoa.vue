@@ -2,7 +2,7 @@
   <q-dialog v-on="$listeners" v-bind="$attrs">
     <q-card style="width: 700px; max-width: 80vw;">
       <q-card-section>
-        <div class="text-h6">Editar Usuário</div>
+        <div class="text-h6">Adicionar Usuário</div>
       </q-card-section>
 
       <q-card-section class="q-pt-none">
@@ -32,10 +32,10 @@
       <q-card-actions align="right">
         <q-btn flat label="Sair" color="primary" v-close-popup />
         <q-btn
-          label="Editar"
+          label="Criar"
           color="primary"
           v-close-popup
-          @click="editarUsuario"
+          @click="adicionarUsuario"
         />
       </q-card-actions>
     </q-card>
@@ -45,12 +45,6 @@
 <script>
 export default {
   name: "dialogEdicaoPessoa",
-  props: {
-    usuario: {
-      type: Object,
-      required: true
-    }
-  },
   data() {
     return {
       categoriaUsuario: ["Admin", "Gerente", "Normal"],
@@ -61,14 +55,13 @@ export default {
     };
   },
   methods: {
-    editarUsuario() {
+    adicionarUsuario() {
       var obj = {
-        codigo: this.codigoUsuario,
         nomeUsuario: this.nomeUsuario,
         emailUsuario: this.emailUsuario,
         categoriaUsuarioInt: this.categoriaUsuarioInt
       };
-      this.$emit("editarUsuario", obj);
+      this.$emit("adicionarUsuario", obj);
     }
   },
   computed: {
@@ -88,18 +81,5 @@ export default {
       return categoriaInt;
     }
   },
-  watch: {
-    usuario(newValue) {
-      this.codigoUsuario = newValue.codigo;
-      this.nomeUsuario = newValue.nome_usuario;
-      this.emailUsuario = newValue.email_usuario;
-      this.tipoUsuario =
-        newValue.fk_categoria_id === 1
-          ? "Admin"
-          : newValue.fk_categoria_id === 2
-          ? "Gerente"
-          : "Normal";
-    }
-  }
 };
 </script>

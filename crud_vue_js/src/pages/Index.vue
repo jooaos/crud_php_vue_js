@@ -13,6 +13,14 @@
         :columns="columns"
         row-key="name"
       >
+        <template v-slot:top>
+          <q-btn
+            color="primary"
+            label="Adicionar pessoa"
+            @click="dialogAdicionarPessoa = true"
+          />
+        </template>
+
         <template v-slot:header="props">
           <q-tr :props="props">
             <q-th auto-width />
@@ -57,15 +65,21 @@
       :usuario="pessoaSelecionadaParaEdicao"
       @editarUsuario="editarPessoa"
     />
+
+    <dialog-adicionar-pessoa
+      v-model="dialogAdicionarPessoa"
+      @adicionarUsuario="adicionarPessoa"
+    />
   </q-page>
 </template>
 
 <script>
 import { api } from "boot/axios";
 import dialogEdicaoPessoa from "../components/dialogEdicaoPessoa.vue";
+import DialogAdicionarPessoa from "../components/dialogAdicionarPessoa.vue";
 
 export default {
-  components: { dialogEdicaoPessoa },
+  components: { dialogEdicaoPessoa, DialogAdicionarPessoa },
   name: "PageIndex",
   data() {
     return {
@@ -101,7 +115,8 @@ export default {
       ],
       pessoas: [],
       pessoaSelecionadaParaEdicao: {},
-      dialogEdicaoPessoa: false
+      dialogEdicaoPessoa: false,
+      dialogAdicionarPessoa: false
     };
   },
   methods: {
@@ -220,11 +235,11 @@ export default {
             icon: "done"
           });
           let usuarioEditado = this.pessoas.find(element => {
-            return (element.codigo === dadosPessoa.codigo);
+            return element.codigo === dadosPessoa.codigo;
           });
-          usuarioEditado.nome_usuario = dadosPessoa.nomeUsuario
-          usuarioEditado.email_usuario = dadosPessoa.emailUsuario
-          usuarioEditado.fk_categoria_id = dadosPessoa.categoriaUsuarioInt
+          usuarioEditado.nome_usuario = dadosPessoa.nomeUsuario;
+          usuarioEditado.email_usuario = dadosPessoa.emailUsuario;
+          usuarioEditado.fk_categoria_id = dadosPessoa.categoriaUsuarioInt;
         })
         .catch(error => {
           if (error) {
@@ -238,6 +253,35 @@ export default {
               });
             });
           }
+        });
+    },
+    adicionarPessoa(dadosPessoa) {
+      api
+        .post("/api/pessoas", {
+          nome_usuario: dadosPessoa.nomeUsuario,
+          email_usuario: dadosPessoa.emailUsuario,
+          fk_categoria_id: dadosPessoa.categoriaUsuarioInt
+        })
+        .then(response => {
+          this.$q.notify({
+            color: "positive",
+            position: "bottom",
+            timeout: 1500,
+            message: response.data,
+            icon: "done"
+          });
+          this.getUsers();
+        })
+        .catch(error => {
+          Object.values(error.response.data.errors).forEach(element => {
+            this.$q.notify({
+              color: "negative",
+              position: "bottom",
+              timeout: 1500,
+              message: element,
+              icon: "report_problem"
+            });
+          });
         });
     }
   },
