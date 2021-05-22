@@ -46,9 +46,9 @@ class PessoasController extends Controller
      * @param  \App\Pessoas  $pessoas
      * @return \Illuminate\Http\Response
      */
-    public function show(Pessoas $pessoas)
+    public function show(Pessoas $pessoa)
     {
-        //
+        return response()->json($pessoa, 200);
     }
 
     /**
