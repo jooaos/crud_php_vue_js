@@ -1,5 +1,5 @@
 <template>
-  <q-page class="column q-ml-xl q-mr-xl">
+  <q-page class="column q-ml-xl q-mr-xl q-mb-xl">
     <header>
       <h6>
         Lista de pessoas cadastradas no sistema
