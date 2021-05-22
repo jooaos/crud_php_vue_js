@@ -2,22 +2,46 @@
   <q-page class="column q-ml-xl q-mr-xl">
     <header>
       <h6>
-        Aqui você pode encontrar a lista de pessoas cadastradas no sistema
+        Lista de pessoas cadastradas no sistema
       </h6>
     </header>
 
     <section class="full-width">
       <q-table
-        title="Usuários"
-        :data="data"
+        title="Pessoas"
+        :data="pessoas"
         :columns="columns"
         row-key="name"
-      />
+      >
+        <template v-slot:header="props">
+          <q-tr :props="props">
+            <q-th auto-width />
+            <q-th v-for="col in props.cols" :key="col.name" :props="props">
+              {{ col.label }}
+            </q-th>
+          </q-tr>
+        </template>
+
+        <template v-slot:body="props">
+          <q-tr :props="props">
+            <q-td auto-width>
+              <q-btn size="sm" color="negative" class="q-mx-sm" round dense icon="delete" />
+              <q-btn size="sm" color="positive" class="q-mx-sm" round dense icon="edit" />
+              <q-btn size="sm" color="info" class="q-mx-sm" round dense icon="visibility" />
+            </q-td>
+            <q-td v-for="col in props.cols" :key="col.name" :props="props">
+              {{ col.value }}
+            </q-td>
+          </q-tr>
+        </template>
+      </q-table>
     </section>
   </q-page>
 </template>
 
 <script>
+import { api } from "boot/axios";
+
 export default {
   name: "PageIndex",
   data() {
@@ -52,14 +76,7 @@ export default {
           field: row => this.verificarTipoDeUsuario(row.fk_categoria_id)
         }
       ],
-      data: [
-        {
-          codigo: "1",
-          nome_usuario: "João Victor Silva Soares",
-          email_usuario: "jovictors.soares@gmail.com",
-          fk_categoria_id: 1
-        }
-      ]
+      pessoas: []
     };
   },
   methods: {
@@ -73,11 +90,36 @@ export default {
           stringTipo = "Gerente";
           break;
         default:
-          stringTipo = "Normal"
+          stringTipo = "Normal";
           break;
       }
-      return stringTipo
+      return stringTipo;
+    },
+    async getUsers() {
+      try {
+        const response = await api.get("/api/pessoas");
+        this.pessoas = response.data;
+      } catch (error) {
+        if (error.response.status === 404) {
+          this.$q.notify({
+            color: "negative",
+            position: "bottom",
+            message: "A requisição solicitada não foi encontrada",
+            icon: "report_problem"
+          });
+        } else {
+          this.$q.notify({
+            color: "negative",
+            position: "bottom",
+            message: "Erro",
+            icon: "report_problem"
+          });
+        }
+      }
     }
   },
+  mounted() {
+    this.getUsers();
+  }
 };
 </script>
