@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Pessoas;
+use App\Http\Requests\UpdateOrDeltePessoasRequest;
+use App\Pessoas as Pessoas;
 use Illuminate\Http\Request;
 
 class PessoasCrontroller extends Controller
@@ -14,7 +15,7 @@ class PessoasCrontroller extends Controller
      */
     public function index()
     {
-        //
+        return Pessoas::all();
     }
 
     /**
@@ -30,12 +31,13 @@ class PessoasCrontroller extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\UpdateOrDeltePessoasRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UpdateOrDeltePessoasRequest $request)
     {
-        //
+        Pessoas::create($request->all());
+        return response()->json('O usuário foi cadastrado com sucesso!', 201); 
     }
 
     /**

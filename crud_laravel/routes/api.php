@@ -14,6 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('/servidores', 'PessoasCrontroller@index')->name('pessoas.index');
+Route::post('/servidores', 'PessoasCrontroller@store')->name('pessoas.store');
