@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePessoasRequest;
+use App\Http\Requests\PessoasRequest;
 use App\Pessoas as Pessoas;
 use Illuminate\Http\Request;
 
@@ -31,10 +31,10 @@ class PessoasController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  App\Http\Requests\StorePessoasRequest  $request
+     * @param  App\Http\Requests\PessoasRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePessoasRequest $request)
+    public function store(PessoasRequest $request)
     {
         Pessoas::create($request->all());
         return response()->json('O usuário foi cadastrado com sucesso!', 201); 
@@ -65,11 +65,11 @@ class PessoasController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\StorePessoasRequest  $request
+     * @param  \Illuminate\Http\PessoasRequest  $request
      * @param  \App\Pessoas  $pessoas
      * @return \Illuminate\Http\Response
      */
-    public function update(StorePessoasRequest $request, Pessoas $pessoas)
+    public function update(PessoasRequest $request, Pessoas $pessoas)
     {
         $pessoas->update($request->all());
         return response()->json('O usuário foi atualizado com sucesso!', 200);

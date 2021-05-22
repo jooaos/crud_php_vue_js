@@ -14,8 +14,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/pessoas', 'PessoasController@index')->name('pessoas.index');
-Route::post('/pessoas', 'PessoasController@store')->name('pessoas.store');
-Route::put('/pessoas/{pessoas}', 'PessoasController@update')->name('pessoas.update');
-Route::delete('/pessoas/{pessoas}', 'PessoasController@destroy')->name('pessoas.destroy');
-Route::get('/pessoas/{pessoa}', 'PessoasController@show')->name('pessoas.show');
+Route::resource('pessoas', 'PessoasController');
