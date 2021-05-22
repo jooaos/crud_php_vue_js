@@ -82,9 +82,10 @@ class PessoasController extends Controller
      * @param  \App\Pessoas  $pessoas
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pessoas $pessoas)
+    public function destroy($idPessoa)
     {
-        $pessoas->delete();
+        $pessoa = Pessoas::findOrFail($idPessoa);
+        $pessoa->delete();
         return response()->json('O usuário foi deletado com sucesso!', 200);
     }
 }

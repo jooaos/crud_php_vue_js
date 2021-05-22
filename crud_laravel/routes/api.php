@@ -14,4 +14,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('pessoas', 'PessoasController');
+Route::apiResource('pessoas', 'PessoasController');
