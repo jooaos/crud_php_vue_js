@@ -12,6 +12,7 @@
           v-model="nomeUsuario"
           label="Nome do usuário"
           class="q-my-md"
+          :rules="[val => !!val || 'Esse campo é obrigatório']"
         />
         <q-input
           outlined
@@ -19,6 +20,13 @@
           v-model="emailUsuario"
           label="E-mail do usuário"
           class="q-my-md"
+          :rules="[
+            val => !!val || 'Esse campo é obrigatório',
+            val =>
+              !!/^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{2,63}\.){1,8}[a-zA-Z]{3,63}$/.test(
+                val
+              ) || 'Digite um e-mail válido'
+          ]"
         />
         <q-select
           outlined
@@ -26,6 +34,7 @@
           :options="categoriaUsuario"
           label="Tipo de usuário"
           class="q-my-md"
+          :rules="[val => !!val || 'Esse campo é obrigatório']"
         />
       </q-card-section>
 
@@ -36,6 +45,7 @@
           color="primary"
           v-close-popup
           @click="adicionarUsuario"
+          :disable="isDisable"
         />
       </q-card-actions>
     </q-card>
@@ -48,7 +58,6 @@ export default {
   data() {
     return {
       categoriaUsuario: ["Admin", "Gerente", "Normal"],
-      codigoUsuario: "",
       nomeUsuario: "",
       emailUsuario: "",
       tipoUsuario: ""
@@ -79,7 +88,10 @@ export default {
           break;
       }
       return categoriaInt;
+    },
+    isDisable() {
+      return !(this.nomeUsuario && this.emailUsuario && this.tipoUsuario);
     }
-  },
+  }
 };
 </script>
