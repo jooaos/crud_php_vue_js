@@ -69,9 +69,13 @@ class PessoasController extends Controller
      * @param  \App\Pessoas  $pessoas
      * @return \Illuminate\Http\Response
      */
-    public function update(PessoasRequest $request, Pessoas $pessoas)
+    public function update(PessoasRequest $request, $idPessoa)
     {
-        $pessoas->update($request->all());
+        $pessoa = Pessoas::findOrFail($idPessoa);
+        $pessoa->nome_usuario = $request->nome_usuario;
+        $pessoa->email_usuario = $request->email_usuario;
+        $pessoa->fk_categoria_id = $request->fk_categoria_id;
+        $pessoa->save();
         return response()->json('O usuário foi atualizado com sucesso!', 200);
         
     }

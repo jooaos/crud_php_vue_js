@@ -35,7 +35,7 @@ class PessoasRequest extends FormRequest
             'nome_usuario.required' => 'É necessário informar um nome para o usuário.',
             'nome_usuario.string' => 'O nome do usuário precisar ser do formato TEXTO.',
             'nome_usuario.max' => 'O nome do usuário pode conter até 255 caracteres.',
-            'email_usario.required' => 'É necessário informar um e-mail para o usuário.',
+            'email_usuario.required' => 'É necessário informar um e-mail para o usuário.',
             'email_usuario.email' => 'Digite um e-mail válido.',
             'email_usuario.max' => 'O e-mail do usuário pode conter até 255 caracteres.',
             'fk_categoria_id.required' => 'É necessário definir uma posição de hierarquia para o usuário.',
