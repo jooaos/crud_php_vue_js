@@ -36,16 +36,9 @@
               />
               <q-btn
                 size="sm"
-                color="positive"
-                class="q-mx-sm"
-                round
-                dense
-                icon="edit"
-              />
-              <q-btn
-                size="sm"
                 color="info"
                 class="q-mx-sm"
+                @click="selecionarPessoaParaEdicao(props.row.codigo)"
                 round
                 dense
                 icon="visibility"
@@ -58,13 +51,21 @@
         </template>
       </q-table>
     </section>
+
+    <dialog-edicao-pessoa
+      v-model="dialogEdicaoPessoa"
+      :usuario="pessoaSelecionadaParaEdicao"
+      @editarUsuario="editarPessoa"
+    />
   </q-page>
 </template>
 
 <script>
 import { api } from "boot/axios";
+import dialogEdicaoPessoa from "../components/dialogEdicaoPessoa.vue";
 
 export default {
+  components: { dialogEdicaoPessoa },
   name: "PageIndex",
   data() {
     return {
@@ -98,7 +99,9 @@ export default {
           field: row => this.verificarTipoDeUsuario(row.fk_categoria_id)
         }
       ],
-      pessoas: []
+      pessoas: [],
+      pessoaSelecionadaParaEdicao: {},
+      dialogEdicaoPessoa: false
     };
   },
   methods: {
@@ -170,6 +173,69 @@ export default {
               timeout: 1500,
               message: "Erro",
               icon: "report_problem"
+            });
+          }
+        });
+    },
+    selecionarPessoaParaEdicao(idPessoa) {
+      api
+        .get(`api/pessoas/${idPessoa}`)
+        .then(response => {
+          this.pessoaSelecionadaParaEdicao = response.data;
+          this.dialogEdicaoPessoa = true;
+        })
+        .catch(error => {
+          if (error.response.status === 404) {
+            this.$q.notify({
+              color: "negative",
+              position: "bottom",
+              timeout: 1500,
+              message: "Usuário não foi encontrado",
+              icon: "report_problem"
+            });
+          } else {
+            this.$q.notify({
+              color: "negative",
+              position: "bottom",
+              timeout: 1500,
+              message: "Erro",
+              icon: "report_problem"
+            });
+          }
+        });
+    },
+    editarPessoa(dadosPessoa) {
+      api
+        .put(`api/pessoas/${dadosPessoa.codigo}`, {
+          nome_usuario: dadosPessoa.nomeUsuario,
+          email_usuario: dadosPessoa.emailUsuario,
+          fk_categoria_id: dadosPessoa.categoriaUsuarioInt
+        })
+        .then(response => {
+          this.$q.notify({
+            color: "positive",
+            position: "bottom",
+            timeout: 1000,
+            message: response.data,
+            icon: "done"
+          });
+          let usuarioEditado = this.pessoas.find(element => {
+            return (element.codigo === dadosPessoa.codigo);
+          });
+          usuarioEditado.nome_usuario = dadosPessoa.nomeUsuario
+          usuarioEditado.email_usuario = dadosPessoa.emailUsuario
+          usuarioEditado.fk_categoria_id = dadosPessoa.categoriaUsuarioInt
+        })
+        .catch(error => {
+          if (error) {
+            Object.values(error.response.data.errors).forEach(element => {
+              this.$q.notify({
+                color: "negative",
+                position: "bottom",
+                timeout: 1500,
+                message: element,
+                icon: "report_problem"
+              });
             });
           }
         });
