@@ -14,5 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/pessoas', 'PessoasCrontroller@index')->name('pessoas.index');
-Route::post('/pessoas', 'PessoasCrontroller@store')->name('pessoas.store');
+Route::get('/pessoas', 'PessoasController@index')->name('pessoas.index');
+Route::post('/pessoas', 'PessoasController@store')->name('pessoas.store');
+Route::put('/pessoas/{pessoas}', 'PessoasController@update')->name('pessoas.update');
