@@ -25,9 +25,31 @@
         <template v-slot:body="props">
           <q-tr :props="props">
             <q-td auto-width>
-              <q-btn size="sm" color="negative" class="q-mx-sm" round dense icon="delete" />
-              <q-btn size="sm" color="positive" class="q-mx-sm" round dense icon="edit" />
-              <q-btn size="sm" color="info" class="q-mx-sm" round dense icon="visibility" />
+              <q-btn
+                size="sm"
+                color="negative"
+                class="q-mx-sm"
+                @click="deletePessoa(props.row.codigo)"
+                round
+                dense
+                icon="delete"
+              />
+              <q-btn
+                size="sm"
+                color="positive"
+                class="q-mx-sm"
+                round
+                dense
+                icon="edit"
+              />
+              <q-btn
+                size="sm"
+                color="info"
+                class="q-mx-sm"
+                round
+                dense
+                icon="visibility"
+              />
             </q-td>
             <q-td v-for="col in props.cols" :key="col.name" :props="props">
               {{ col.value }}
@@ -116,6 +138,41 @@ export default {
           });
         }
       }
+    },
+    deletePessoa(idPessoa) {
+      api
+        .delete(`/api/pessoas/${idPessoa}`)
+        .then(response => {
+          this.pessoas = this.pessoas.filter(element => {
+            return element.codigo != idPessoa;
+          });
+          this.$q.notify({
+            color: "positive",
+            position: "bottom",
+            timeout: 1000,
+            message: response.data,
+            icon: "done"
+          });
+        })
+        .catch(error => {
+          if (error.response.status === 404) {
+            this.$q.notify({
+              color: "negative",
+              position: "bottom",
+              timeout: 1500,
+              message: "Usuário não foi encontrado",
+              icon: "report_problem"
+            });
+          } else {
+            this.$q.notify({
+              color: "negative",
+              position: "bottom",
+              timeout: 1500,
+              message: "Erro",
+              icon: "report_problem"
+            });
+          }
+        });
     }
   },
   mounted() {
