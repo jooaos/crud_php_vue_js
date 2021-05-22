@@ -14,8 +14,10 @@ class CreatePessoasTable extends Migration
     public function up()
     {
         Schema::create('pessoas', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->bigIncrements('codigo');
+            $table->string('nome_usuario');
+            $table->string('email_usuario');
+            $table->foreignId('fk_categoria_id')->references('codigo')->on('categoria')->onDelete('cascade');
         });
     }
 
