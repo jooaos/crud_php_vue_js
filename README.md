@@ -11,7 +11,7 @@ Para fazer os testes, você precisa ter instalado em sua máquina:
  - [Quasar]
  - [MySQL]
 
-Para instalar o [Quasar] pode ser utilizado o seguinte comando:
+O [Quasar] pode ser instalado da seguinte forma:
 ```sh
 npm install -g @quasar/cli
 quasar
